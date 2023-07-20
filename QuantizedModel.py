@@ -15,7 +15,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
 import brevitas.nn as qnn
-from concrete.ml.torch.compile import compile_brevitas_qat_model
+# from concrete.ml.torch.compile import compile_brevitas_qat_model
 
 class model(nn.Module):
     def __init__(self):
@@ -73,3 +73,4 @@ for epoch in range(10):
         if batch % 100 == 0:
             print('\tbatch: %d, loss: %.4f' % (batch, loss))
     print('epoch: %d， acc: %.2f%%, loss: %.4f' % (epoch, 100 * acc / sum, loss_sum / len(train_loader)))
+torch.save(net.state_dict(),'./model/quantized_model.pkl')

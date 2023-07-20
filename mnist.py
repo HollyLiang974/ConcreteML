@@ -23,7 +23,7 @@ net = nn.Sequential(
     nn.Linear(4096, 10)
 )
 
-train_data = torchvision.datasets.MNIST('./data', train=True, transform=torchvision.transforms.ToTensor())
+train_data = torchvision.datasets.MNIST('./data', download=True,train=True, transform=torchvision.transforms.ToTensor())
 train_loader = torch.utils.data.DataLoader(train_data, batch_size=128, shuffle=True)
 
 criterion = torch.nn.CrossEntropyLoss()

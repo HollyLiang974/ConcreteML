@@ -14,30 +14,39 @@ import torch.nn as nn
 import brevitas.nn as qnn
 import numpy
 from concrete.ml.torch.compile import compile_torch_model
+import time
+
 class model(nn.Module):
     def __init__(self):
         super(model,self).__init__()
-        # self.linear=qnn.QuantLinear(2,1,weight_bit_width=8,bias=False)
-        self.linear=nn.Linear(2,1)
-        a=torch.tensor([[1,2],[3,4]])
-        b=torch.tensor([[5,6],[7,8]])
-
-
+        self.linear1=nn.Linear(2,3)
+        self.relu=nn.ReLU()
+        self.linear2 = nn.Linear(3,1)
 
     def forward(self,x):
-        x=self.linear(x)
+        x=self.linear1(x)
+        x=self.relu(x)
+        x=self.linear2(x)
         return x
 
 net=model()
 input=torch.randn(10,2)
-
+#编译时间
+start_time = time.time()
 quantized_module = compile_torch_model(
     net, # our model
     input, # a representative input-set to be used for both quantization and compilation
 )
-x_test = numpy.array([numpy.random.randn(2)])
+end_time = time.time()
+print("编译时间：",end_time-start_time)
 
+
+x_test = numpy.array([numpy.random.randn(2)])
+#推理时间
+start_time = time.time()
 y_pred = quantized_module.forward(x_test, fhe="execute")
 print(y_pred)
+end_time = time.time()
+print("推理时间：",end_time-start_time)
 
 

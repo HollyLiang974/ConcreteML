@@ -1,13 +1,16 @@
 '''
 -*- ecoding: utf-8 -*-
 @Enviroment: ConcreteML
-@ModuleName: test
+@ModuleName: CompileTorchModel
 @Author: Sakura
 @Time: 2023/7/21 13:59
 @Software: PyCharm
-功能描述:
+功能描述: 编译Torch模型
 实现步骤:
-结果：
+结果：偶尔会出现编译失败的情况
+编译时间： 20.415812253952026
+[[-0.1113784]]
+推理时间： 60.37916564941406
 '''
 import torch
 import torch.nn as nn

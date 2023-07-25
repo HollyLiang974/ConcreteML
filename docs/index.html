@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Docsify-Guide</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="Description">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- 设置浏览器图标 -->
+    <link rel="icon" href="/icon.gif" type="image/x-icon" />
+    <link rel="shortcut icon" href="/icon.gif" type="image/x-icon" />
+    <!-- 默认主题 -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/lib/themes/vue.css">
+    <!-- 公式 -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" />
+    <!-- 代码块行号 -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/prism/9000.0.1/plugins/line-numbers/prism-line-numbers.css">
+    <!-- 评论功能 -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
+    <!-- 分页导航 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+    <!-- 添加右侧目录 -->
+    <link rel="stylesheet" href="https://unpkg.com/docsify-plugin-toc@1.3.1/dist/light.css">
+    <!-- Edit on Github -->
+    <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github"></script>
+    <!-- 侧边栏折叠 -->
+    <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+    <!-- <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script> --> -->
+   
+    <style>
+    /*
+    * Fix line number in code block. 
+    * Change this overflow attr to <pre> not the <code>.
+    */
+    .markdown-section pre[data-lang] {
+        overflow: auto !important;
+    }
+    .markdown-section pre[data-lang] code {
+        /*overflow: visible;*/
+        padding: 1.25rem 3.25rem;
+    }
+    .line-numbers .line-numbers-rows {
+        left: -1px;
+        border-right : 1px solid #fff;
+        /* Fix paddings to align with code.*/
+        padding: 1.25rem 0; /* Same as code block */
+    }
+    pre.line-numbers {
+        position: relative;
+        padding-left: unset;
+        counter-reset: linenumber;
+    }
+    /* 自定义侧边栏 */
+
+    aside.sidebar ul.app-sub-sidebar li.active {
+    position: relative;
+    }
+    aside.sidebar ul.app-sub-sidebar li.active > a:before {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        top: 10px;
+        left: -5px;
+        border-radius: 50%;
+        background-color: #fed24a;
+        box-shadow: 0 0 0 3px rgba(254, 210, 74, .4);
+    }
+    /* 滚动条样式 start */
+    ::-webkit-scrollbar { /* 滚动条宽度 */
+        width: 4px;
+        height: 4px;
+    }
+    ::-webkit-scrollbar-thumb { /* 滚动条颜色 */
+        background: #33a9dc;
+        background-image: linear-gradient(#6ecd56, #33a9dc, #cb6196, #c16290);
+        border-radius: 2em;
+    }
+    /* 滚动条样式 end */
+
+    /* 去掉标题上的空白 */
+    .content{
+        padding-top: 0px
+    }
+    
+
+    </style>
+
+   
+</head>
+
+<body>
+    <!-- 定义加载时候的动作 -->
+    <div id="app">加载中...</div>
+
+    <script>
+        window.$docsify = {
+            // 项目名称
+            name: 'ConcreteML',
+            // 仓库地址，点击右上角的Github章鱼猫头像会跳转到此地址
+            repo: 'https://github.com/HollyLiang974/ConcreteML',
+            auto2top: true,  //当路线改变时,滚动到屏幕的顶部
+            // 侧边栏支持，默认加载的是项目根目录下的_sidebar.md文件
+            loadSidebar: true,
+            // 导航栏支持，默认加载的是项目根目录下的_navbar.md文件
+            loadNavbar: true,
+            // 封面支持，默认加载的是项目根目录下的_coverpage.md文件
+            // coverpage: true,
+            // 最大支持渲染的标题层级
+            maxLevel: 5,
+            // 自定义侧边栏后默认不会再生成目录，设置生成目录的最大层级（建议配置为2-4）
+            // subMaxLevel: 2,
+            // 小屏设备下合并导航栏到侧边栏
+            mergeNavbar: true,
+            // alias: {
+            //     '/.*/_sidebar.md': '/_sidebar.md',
+            // },
+            // sidebarDisplayLevel: 1,
+            /*搜索相关设置*/
+            search: {
+                paths: 'auto',
+                placeholder: '🔍 搜索',
+                noData: '😒 找不到结果',
+                // Headline depth, 1 - 6
+                depth: 6,
+                maxAge: 86400000, // 过期时间，单位毫秒，默认一天
+            },//添加搜索框
+
+            // markdown中====高亮
+            plugins: [
+                function(hook, vm) {
+                    hook.beforeEach(function (html) {
+                    //适配Markdown的====高亮语法
+                    let res = html.match(/==(.+?)==/g);
+                    for (var i = 0; i < res.length; i++) {
+                        html = html.replace(res[i],`<span style="background-color: #ADFF2F;">`+res[i].replace(/==/g,"")+`</span>`);
+                     }
+                    //将更新时间加到文档的最顶部
+                    // return '> Last Modified {docsify-updated}'
+                    // + '\n----\n'
+                    // + html;
+                    return html;
+                    })
+                },
+                
+                EditOnGithubPlugin.create(
+                    'https://github.com/docsifyjs/docsify/blob/master/docs/',
+                    null,
+                    function(file) {
+                        if (file.indexOf('en') === -1) {
+                            return '在Github上编辑'
+                        } else {
+                            return 'edit on git'
+                        }
+                    }
+                )
+            ],
+            // // 分页导航   
+            // pagination: {
+            //     previousText: '上一章节',
+            //     nextText: '下一章节',
+            //     crossChapter: true,
+            //     crossChapterText: true,
+            // },
+
+            //生成目录 
+            toc: {
+                tocMaxLevel: 5,
+                target: 'h2, h3, h4, h5, h6',
+                ignoreHeaders:  ['<!-- {docsify-ignore} -->', '<!-- {docsify-ignore-all} -->']
+            },
+            
+
+        }
+        
+    </script>
+    <!-- 添加右侧目录 -->
+    <script src="https://unpkg.com/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js"></script>
+    <!-- docsify的js依赖 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+    <!-- emoji表情支持 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+    <!-- 图片放大缩小支持 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+    <!-- 搜索功能支持 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+    <!--在所有的代码块上添加一个简单的Click to copy按钮来允许用户从你的文档中轻易地复制代码-->
+    <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+    <!-- 公式 -->
+    <script src="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/marked@4"></script>
+    <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
+    <!-- 回到顶部功能 -->
+    <script src="https://notebook.js.org/plugin/jquery.js"></script>
+    <script src="https://notebook.js.org/plugin/jquery.goup.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+        $.goup({
+            trigger: 100,
+            bottomOffset: 52,
+            locationOffset: 25,
+            //title: 'TOP',
+            titleAsText: true
+        });
+        });
+    </script>
+    <!-- 代码块样式优化-->
+    <script src="https://notebook.js.org/plugin/prism-c.js"></script>
+    <!--<script src="//unpkg.com/prismjs/components/prism-cpp.js"></script>-->
+    <script src="https://notebook.js.org/plugin/prism-cpp.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-css.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-docker.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-java.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-javascript.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-json.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-latex.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-sql.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-markdown.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-bash.min.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-php.min.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-scala.min.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-nginx.min.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-json.min.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-markdown.min.js"></script>
+    <script src="https://notebook.js.org/plugin/prism-python.js"></script>
+    <script src="https://notebook.js.org/plugin/js/prism-yaml.js"></script>
+    <script src="https://notebook.js.org/plugin/js/prism-go.js"></script>
+    <script src="https://notebook.js.org/plugin/js/prism-matlab.js"></script>
+
+    <!-- 访问量统计 -->
+    <!-- <script async src="https://notebook.js.org/plugin/js/busuanzi.pure.mini.js"></script> -->
+
+    <!-- 添加 PDF 页面展示功能 -->
+    <!-- PDFObject.js is a required dependency of this plugin -->
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>-->
+    <script src="https://notebook.js.org/plugin/pdfobject.min.js"></script>
+    <!-- This is the source code of the pdf embed plugin -->
+    <script src="https://notebook.js.org/plugin/docsify-pdf-embed.js"></script>
+
+    
+    <!-- 代码块行号 -->
+    <script>
+        window.$docsify.markdown = {
+        renderer: {
+            /* Change code block rendering. Add line-numbers class.*/
+            code: function (code, lang) {
+            let cc = document.createElement('code');
+            cc.textContent = code;
+            cc.setAttribute('class', 'language-' + lang);
+            return '<pre data-lang="' + lang + '" class="line-numbers">' + cc.outerHTML + '</pre>';
+            }
+        }
+        }
+        window.$docsify.plugins.push(
+        function (hook, vm) {
+            hook.doneEach(function (html) {
+            Prism.highlightAll();
+        
+            var o = Array.apply(null, document.querySelectorAll("pre[data-lang] code"));
+            o.forEach(function (o) {
+                var linesNum = (1 + o.textContent.split('\n').length);
+                var lineNumbersWrapper;
+        
+                var lines = new Array(linesNum);
+                lines = lines.join('<span></span>');
+        
+                lineNumbersWrapper = document.createElement('span');
+                lineNumbersWrapper.className = 'line-numbers-rows';
+                lineNumbersWrapper.innerHTML = lines;
+        
+                o.appendChild(lineNumbersWrapper);
+            })
+            })
+        }
+        )
+    </script>
+
+    <!-- mouse click 出现爱心-->
+    <!-- <script src="//cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/js/click_heart.js"></script> -->
+
+
+    <!-- 评论功能 -->
+    <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/gitalk.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
+    <script>
+    const gitalk = new Gitalk({
+        clientID: '26d6e0cda9e14a2733bc',
+        clientSecret: '070a52a73f64bbcfa7363c4e3df6955bbc6c0581',
+        repo: 'myblogtalk',
+        owner: 'HollyLiang974',
+        admin: ['HollyLiang974'],
+        // facebook-like distraction free mode
+        distractionFreeMode: false
+    })
+    </script> -->
+
+
+    
+
+</body>
+
+</html>

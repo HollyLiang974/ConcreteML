@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/prism/9000.0.1/plugins/line-numbers/prism-line-numbers.css">
     <!-- 评论功能 -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
+
     <!-- 分页导航 -->
     <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
@@ -28,7 +29,7 @@
     <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github"></script>
     <!-- 侧边栏折叠 -->
     <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
-    <!-- <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script> --> -->
+     <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script> --> -->
    
     <style>
     /*
@@ -95,6 +96,7 @@
 <body>
     <!-- 定义加载时候的动作 -->
     <div id="app">加载中...</div>
+    <div id="gitalk-container"></div>
 
     <script>
         window.$docsify = {
@@ -295,6 +297,7 @@
         // facebook-like distraction free mode
         distractionFreeMode: false
     })
+    gitalk.render('gitalk-container');
     </script>
 
 

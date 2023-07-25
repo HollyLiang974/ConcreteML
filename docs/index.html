@@ -29,7 +29,8 @@
     <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github"></script>
     <!-- 侧边栏折叠 -->
     <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
-     <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script> -->
+     <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+     -->
     <!-- 引入 js，对 url 加密   -->
     <script src="{{ site.baseurl }}/js/md5.min.js"></script>
     <style>
@@ -289,13 +290,15 @@
     <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/gitalk.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
     <script>
+    // 截取字符串
+    var title = location.pathname.substr(0, 50);
     const gitalk = new Gitalk({
         clientID: '686aefdb9be31520d239',
         clientSecret: '3078ff0ce2a65389a078fc66ef9b4012c5a90a97',
         repo: 'ConcreteML',
         owner: 'HollyLiang974',
         admin: ['HollyLiang974'],
-        id: md5(location.href),
+        id: title,
         // facebook-like distraction free mode
         distractionFreeMode: false
     })

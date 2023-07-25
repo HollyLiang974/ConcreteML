@@ -57,7 +57,7 @@ code "%USERPROFILE%/.docker/config.json"
 base64编码的身份验证信息获取，打开powershell
 
 ```powershell
-[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes('HollyLiang:lhl@123456'))
+[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes('docker用户名:密码'))
 >>
 SG9sbHlMaWFuZzpsaGxAMTIzNDU2
 ```

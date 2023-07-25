@@ -103,7 +103,7 @@ print(f"Similarity: {int((y_pred_fhe == y_pred_clear).mean()*100)}%")
 
 **运行结果**
 
-![image-20230716202337515](../assets/image-20230716202337515.png)
+![image-20230716202337515](./assets/image-20230716202337515.png)
 
 
 

@@ -19,14 +19,14 @@ docker run --rm -it zamafhe/concrete-ml /bin/bash
 
 ### 1.2  Pycharm使用SSH远程连接虚拟机docker环境
 
-<img src="../assets/image-20230714212237768.png" alt="image-20230714212237768" style="zoom:80%;" />
-<br>
-<br>
-<img src="../assets/image-20230714212309485.png" alt="image-20230714212309485" style="zoom: 67%;" />
+![image-20230714212237768](assets/image-20230714212237768.png)
+
+
+![image-20230714212309485](assets/image-20230714212309485.png)
 
 **在虚拟机端启动docker容器就可以在Pycharm右下角的服务中看到正在运行的容器了**
 
-![image-20230714212459677](../assets/image-20230714212459677.png)
+![image-20230714212459677](./assets/image-20230714212459677.png)
 
 ### 1.3  Pycharm使用本地Docker
 
@@ -128,11 +128,11 @@ pip install concrete-ml
 
 ### 2.2 Pycharm使用SSH远程连接虚拟机conda环境
 
-<img src="../assets/image-20230714213352929.png" alt="image-20230714213352929" style="zoom:80%;" />
+![image-20230714213352929](assets/image-20230714213352929.png)
 
 **设置好同步文件夹**
 
-<img src="../assets/image-20230714233537898.png" alt="image-20230714233537898" style="zoom: 67%;" />
+![image-20230714233537898](assets/image-20230714233537898.png)
 
 
 
@@ -176,4 +176,4 @@ print(f"Similarity: {(y_pred_fhe == y_pred_clear).mean():.1%}")
 
 **运算结果**
 
-![image-20230714233739561](../assets/image-20230714233739561.png)
+![image-20230714233739561](./assets/image-20230714233739561.png)

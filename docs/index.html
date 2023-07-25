@@ -29,8 +29,9 @@
     <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github"></script>
     <!-- 侧边栏折叠 -->
     <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
-     <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script> --> -->
-   
+     <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script> -->
+    <!-- 引入 js，对 url 加密   -->
+    <script src="{{ site.baseurl }}/js/md5.min.js"></script>
     <style>
     /*
     * Fix line number in code block. 
@@ -294,6 +295,7 @@
         repo: 'ConcreteML',
         owner: 'HollyLiang974',
         admin: ['HollyLiang974'],
+        id: md5(location.href),
         // facebook-like distraction free mode
         distractionFreeMode: false
     })

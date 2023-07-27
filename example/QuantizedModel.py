@@ -73,4 +73,4 @@ for epoch in range(10):
         if batch % 100 == 0:
             print('\tbatch: %d, loss: %.4f' % (batch, loss))
     print('epoch: %d， acc: %.2f%%, loss: %.4f' % (epoch, 100 * acc / sum, loss_sum / len(train_loader)))
-torch.save(net.state_dict(),'./model/quantized_model.pkl')
+torch.save(net.state_dict(), '../model/quantized_model.pkl')

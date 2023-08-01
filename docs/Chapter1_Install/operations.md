@@ -5,151 +5,168 @@
 > 位宽越长，计算时间越长
 
 ```
-/home/holly/anaconda3/envs/concreteML/bin/python /home/holly/concrete-ml/operations.py 
+/home/holly/anaconda3/envs/concrete-ml/bin/python /home/holly/concrete-ml/example/operations.py 
 ************************************************** TestAdd **************************************************
 %0 = x                  # EncryptedScalar<int2>        ∈ [-2, 1]
 %1 = y                  # ClearScalar<int2>            ∈ [-2, 1]
 %2 = add(%0, %1)        # EncryptedScalar<int1>        ∈ [-1, -1]
 return %2
 结果: 1
-时间: 0.0003695487976074219
+时间: 0.00046443939208984375
 %0 = x                  # EncryptedScalar<int2>        ∈ [-2, 1]
 %1 = y                  # EncryptedScalar<int2>        ∈ [-2, 1]
 %2 = add(%0, %1)        # EncryptedScalar<int1>        ∈ [-1, -1]
 return %2
 结果: 1
-时间: 0.0003457069396972656
+时间: 0.0003917217254638672
 %0 = x                  # EncryptedScalar<int4>        ∈ [-8, 7]
 %1 = y                  # ClearScalar<int4>            ∈ [-8, 7]
 %2 = add(%0, %1)        # EncryptedScalar<int1>        ∈ [-1, -1]
 return %2
 结果: 1
-时间: 0.0005078315734863281
+时间: 0.00030303001403808594
 %0 = x                  # EncryptedScalar<int4>        ∈ [-8, 7]
 %1 = y                  # EncryptedScalar<int4>        ∈ [-8, 7]
 %2 = add(%0, %1)        # EncryptedScalar<int1>        ∈ [-1, -1]
 return %2
 结果: 1
-时间: 0.00043582916259765625
+时间: 0.0003383159637451172
 %0 = x                  # EncryptedScalar<int8>        ∈ [-128, 127]
 %1 = y                  # ClearScalar<int8>            ∈ [-128, 127]
 %2 = add(%0, %1)        # EncryptedScalar<int1>        ∈ [-1, -1]
 return %2
 结果: 1
-时间: 0.0008387565612792969
+时间: 0.0004138946533203125
 %0 = x                  # EncryptedScalar<int8>        ∈ [-128, 127]
 %1 = y                  # EncryptedScalar<int8>        ∈ [-128, 127]
 %2 = add(%0, %1)        # EncryptedScalar<int1>        ∈ [-1, -1]
 return %2
 结果: 1
-时间: 0.0005042552947998047
+时间: 0.0003552436828613281
 %0 = x                  # EncryptedScalar<int16>        ∈ [-32768, 32767]
 %1 = y                  # ClearScalar<int16>            ∈ [-32768, 32767]
 %2 = add(%0, %1)        # EncryptedScalar<int1>         ∈ [-1, -1]
 return %2
 结果: 1
-时间: 0.00029468536376953125
+时间: 0.00028228759765625
 %0 = x                  # EncryptedScalar<int16>        ∈ [-32768, 32767]
 %1 = y                  # EncryptedScalar<int16>        ∈ [-32768, 32767]
 %2 = add(%0, %1)        # EncryptedScalar<int1>         ∈ [-1, -1]
 return %2
 结果: 1
-时间: 0.0003631114959716797
+时间: 0.0004055500030517578
 ************************************************** TestSub **************************************************
 %0 = x                       # EncryptedScalar<int2>        ∈ [-2, 1]
 %1 = y                       # ClearScalar<int2>            ∈ [-2, 1]
 %2 = subtract(%0, %1)        # EncryptedScalar<int3>        ∈ [-3, 3]
 return %2
 结果: -1
-时间: 0.00041985511779785156
+时间: 0.00033164024353027344
 %0 = x                       # EncryptedScalar<int2>        ∈ [-2, 1]
 %1 = y                       # EncryptedScalar<int2>        ∈ [-2, 1]
 %2 = subtract(%0, %1)        # EncryptedScalar<int3>        ∈ [-3, 3]
 return %2
 结果: -1
-时间: 0.0005280971527099609
+时间: 0.00036215782165527344
 %0 = x                       # EncryptedScalar<int4>        ∈ [-8, 7]
 %1 = y                       # ClearScalar<int4>            ∈ [-8, 7]
 %2 = subtract(%0, %1)        # EncryptedScalar<int5>        ∈ [-15, 15]
 return %2
 结果: -1
-时间: 0.00041985511779785156
+时间: 0.00026154518127441406
 %0 = x                       # EncryptedScalar<int4>        ∈ [-8, 7]
 %1 = y                       # EncryptedScalar<int4>        ∈ [-8, 7]
 %2 = subtract(%0, %1)        # EncryptedScalar<int5>        ∈ [-15, 15]
 return %2
 结果: -1
-时间: 0.0005004405975341797
+时间: 0.0003123283386230469
 %0 = x                       # EncryptedScalar<int8>        ∈ [-128, 127]
 %1 = y                       # ClearScalar<int8>            ∈ [-128, 127]
 %2 = subtract(%0, %1)        # EncryptedScalar<int9>        ∈ [-255, 255]
 return %2
 结果: -1
-时间: 0.000308990478515625
+时间: 0.00033473968505859375
 %0 = x                       # EncryptedScalar<int8>        ∈ [-128, 127]
 %1 = y                       # EncryptedScalar<int8>        ∈ [-128, 127]
 %2 = subtract(%0, %1)        # EncryptedScalar<int9>        ∈ [-255, 255]
 return %2
 结果: -1
-时间: 0.00036835670471191406
+时间: 0.0004589557647705078
 %0 = x                       # EncryptedScalar<int16>        ∈ [-32768, 32767]
 %1 = y                       # ClearScalar<int16>            ∈ [-32768, 32767]
 %2 = subtract(%0, %1)        # EncryptedScalar<int17>        ∈ [-65535, 65535]
 return %2
 结果: -1
-时间: 0.0004363059997558594
+时间: 0.0004210472106933594
 %0 = x                       # EncryptedScalar<int16>        ∈ [-32768, 32767]
 %1 = y                       # EncryptedScalar<int16>        ∈ [-32768, 32767]
 %2 = subtract(%0, %1)        # EncryptedScalar<int17>        ∈ [-65535, 65535]
 return %2
 结果: -1
-时间: 0.0003180503845214844
+时间: 0.0004153251647949219
 ************************************************** TestMul **************************************************
 %0 = x                       # EncryptedScalar<int2>        ∈ [-2, 1]
 %1 = y                       # ClearScalar<int2>            ∈ [-2, 1]
 %2 = multiply(%0, %1)        # EncryptedScalar<int2>        ∈ [-2, -2]
 return %2
 结果: 0
-时间: 0.0005311965942382812
+时间: 0.0003108978271484375
 %0 = x                       # EncryptedScalar<int2>        ∈ [-2, 1]
 %1 = y                       # EncryptedScalar<int2>        ∈ [-2, 1]
 %2 = multiply(%0, %1)        # EncryptedScalar<int2>        ∈ [-2, -2]
 return %2
 结果: 0
-时间: 1.3543510437011719
+时间: 1.0131540298461914
 %0 = x                       # EncryptedScalar<int4>        ∈ [-8, 7]
 %1 = y                       # ClearScalar<int4>            ∈ [-8, 7]
 %2 = multiply(%0, %1)        # EncryptedScalar<int7>        ∈ [-56, -56]
 return %2
 结果: 0
-时间: 0.00028324127197265625
+时间: 0.0002846717834472656
 %0 = x                       # EncryptedScalar<int4>        ∈ [-8, 7]
 %1 = y                       # EncryptedScalar<int4>        ∈ [-8, 7]
 %2 = multiply(%0, %1)        # EncryptedScalar<int7>        ∈ [-56, -56]
 return %2
 结果: 0
-时间: 60.93878197669983
+时间: 26.822704315185547
 ************************************************** TestDiv **************************************************
 %0 = x                           # EncryptedScalar<int2>        ∈ [-2, -2]
 %1 = 1                           # ClearScalar<uint1>           ∈ [1, 1]
 %2 = floor_divide(%1, %0)        # EncryptedScalar<int1>        ∈ [-1, -1]
 return %2
 结果: 0
-时间: 0.9732739925384521
+时间: 0.7009823322296143
 %0 = x                           # EncryptedScalar<int4>        ∈ [-8, -8]
 %1 = 1                           # ClearScalar<uint1>           ∈ [1, 1]
 %2 = floor_divide(%1, %0)        # EncryptedScalar<int1>        ∈ [-1, -1]
 return %2
 结果: 0
-时间: 2.5715441703796387
+时间: 1.552710771560669
 %0 = x                           # EncryptedScalar<int8>        ∈ [-128, -128]
 %1 = 1                           # ClearScalar<uint1>           ∈ [1, 1]
 %2 = floor_divide(%1, %0)        # EncryptedScalar<int1>        ∈ [-1, -1]
 return %2
 结果: 0
-时间: 210.9334361553192
+时间: 115.94496941566467
+%0 = x                           # EncryptedScalar<int2>        ∈ [-2, -2]
+%1 = 1                           # ClearScalar<uint1>           ∈ [1, 1]
+%2 = floor_divide(%0, %1)        # EncryptedScalar<int2>        ∈ [-2, -2]
+return %2
+结果: 0
+时间: 0.6185073852539062
+%0 = x                           # EncryptedScalar<int4>        ∈ [-8, -8]
+%1 = 1                           # ClearScalar<uint1>           ∈ [1, 1]
+%2 = floor_divide(%0, %1)        # EncryptedScalar<int4>        ∈ [-8, -8]
+return %2
+结果: 0
+时间: 1.5069186687469482
+%0 = x                           # EncryptedScalar<int8>        ∈ [-128, -128]
+%1 = 1                           # ClearScalar<uint1>           ∈ [1, 1]
+%2 = floor_divide(%0, %1)        # EncryptedScalar<int8>        ∈ [-128, -128]
+return %2
+结果: 0
+时间: 120.8521785736084
 
 进程已结束,退出代码0
-
 ```
 

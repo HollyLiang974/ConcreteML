@@ -86,7 +86,7 @@ TestMul([(-8, 7), (7, -8)], x, y, {"x": "encrypted", "y": "encrypted"})
 # TestMul([(-32768, 32767), (32767, -32768)], x, y, {"x": "encrypted", "y": "clear"})
 # TestMul([(-32768, 32767), (32767, -32768)], x, y, {"x": "encrypted", "y": "encrypted"})
 print("*"*50,"TestDiv","*"*50)
-def TestDiv(inputset,x,parameters: Mapping[str, Union[str, EncryptionStatus]]):
+def TestDiv1(inputset,x,parameters: Mapping[str, Union[str, EncryptionStatus]]):
     @fhe.compiler(parameters)
     def div(x):
         return 1 // x
@@ -98,9 +98,23 @@ def TestDiv(inputset,x,parameters: Mapping[str, Union[str, EncryptionStatus]]):
     print("时间:", end_time - start_time)
     return 0
 
-TestDiv([(-2)], x, {"x": "encrypted"})
-TestDiv([(-8)], x,  {"x": "encrypted"})
-TestDiv([(-128) ], x, {"x": "encrypted"})
+TestDiv1([(-2)], x, {"x": "encrypted"})
+TestDiv1([(-8)], x,  {"x": "encrypted"})
+TestDiv1([(-128) ], x, {"x": "encrypted"})
 #TestDiv([(-32768)], x,  {"x": "encrypted"})
 
+def TestDiv2(inputset,x,parameters: Mapping[str, Union[str, EncryptionStatus]]):
+    @fhe.compiler(parameters)
+    def div(x):
+        return x // 1
+    circuit = div.compile(inputset)
+    print(circuit)
+    start_time = time.time()
+    print("结果:", circuit.encrypt_run_decrypt(x))
+    end_time = time.time()
+    print("时间:", end_time - start_time)
+    return 0
 
+TestDiv2([(-2)], x, {"x": "encrypted"})
+TestDiv2([(-8)], x,  {"x": "encrypted"})
+TestDiv2([(-128) ], x, {"x": "encrypted"})

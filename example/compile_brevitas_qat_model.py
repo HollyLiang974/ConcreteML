@@ -10,6 +10,7 @@
 结果：
 编译时间 0.733043909072876
 执行时间 274.36567759513855
+bitwidth 10
 '''
 import brevitas.nn as qnn
 import torch.nn as nn
@@ -48,10 +49,11 @@ quantized_module = compile_brevitas_qat_model(
 )
 end = time.time()
 print("编译时间",end-start)
+bitwidth = quantized_module.fhe_circuit.graph.maximum_integer_bit_width()
+print("bitwidth",bitwidth)
 
-
-x_test = numpy.array([numpy.random.randn(N_FEAT)])
-start = time.time()
-y_pred = quantized_module.forward(x_test, fhe="execute")
-end = time.time()
-print("执行时间",end-start)
+# x_test = numpy.array([numpy.random.randn(N_FEAT)])
+# start = time.time()
+# y_pred = quantized_module.forward(x_test, fhe="execute")
+# end = time.time()
+# print("执行时间",end-start)

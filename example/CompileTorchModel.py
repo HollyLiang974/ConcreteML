@@ -12,6 +12,12 @@
 [[-0.1113784]]
 推理时间： 60.37916564941406
 bitwidth= 16
+
+编译时间： 0.19651556015014648
+biwidth: 5
+[[-0.1603658]]
+推理时间： 8.404378175735474
+
 '''
 import torch
 import torch.nn as nn
@@ -40,19 +46,20 @@ start_time = time.time()
 quantized_module = compile_torch_model(
     net, # our model
     input, # a representative input-set to be used for both quantization and compilation
+    n_bits=3
 )
 end_time = time.time()
 print("编译时间：",end_time-start_time)
 bitwidth=quantized_module.fhe_circuit.graph.maximum_integer_bit_width()
-print(bitwidth)
+print("biwidth:",bitwidth)
 
 
-# x_test = numpy.array([numpy.random.randn(2)])
-# #推理时间
-# start_time = time.time()
-# y_pred = quantized_module.forward(x_test, fhe="execute")
-# print(y_pred)
-# end_time = time.time()
-# print("推理时间：",end_time-start_time)
+x_test = numpy.array([numpy.random.randn(2)])
+#推理时间
+start_time = time.time()
+y_pred = quantized_module.forward(x_test, fhe="execute")
+print(y_pred)
+end_time = time.time()
+print("推理时间：",end_time-start_time)
 
 

@@ -16,7 +16,7 @@ import torch.nn as nn
 import torch
 
 N_FEAT = 12
-n_bits = 3
+n_bits = 4
 
 class QATSimpleNet(nn.Module):
     def __init__(self, n_hidden):

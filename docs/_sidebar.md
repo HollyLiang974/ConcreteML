@@ -4,4 +4,5 @@
     - [2.支持的操作](./Chapter1_Install/concrete-ml支持的操作.md)
     - [3.基础操作性能](Chapter1_Install\operations.md)
     - [4.查表操作性能](Chapter1_Install\TableLookup.md)
-  
+    - [5. 非线性操作性能](Chapter1_Install\Nolinear.md)
+    - [6. 线性操作性能](Chapter1_Install\Linear.md)

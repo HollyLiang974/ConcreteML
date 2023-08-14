@@ -6,3 +6,4 @@
     - [4.查表操作性能](Chapter1_Install\TableLookup.md)
     - [5. 非线性操作性能](Chapter1_Install\Nolinear.md)
     - [6. 线性操作性能](Chapter1_Install\Linear.md)
+    - [7. 量化中的QAT和PTQ](./Chapter1_Install/QAT_PTQ.md)

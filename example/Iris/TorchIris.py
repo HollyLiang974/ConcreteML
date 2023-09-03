@@ -5,7 +5,7 @@
 @Author: Sakura
 @Time: 2023/9/2 16:11
 @Software: PyCharm
-功能描述: 使用Iris数据集训练前馈神经网络
+功能描述: 使用PyTorch和Iris数据集训练前馈神经网络
 实现步骤:
 结果：
 '''

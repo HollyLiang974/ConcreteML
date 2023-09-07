@@ -13,11 +13,12 @@
 结果：
 '''
 import numpy as np
+from concrete import fhe
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
-from concrete import fhe
+from sklearn.preprocessing import StandardScaler
+
 # 加载Iris数据集
 iris = datasets.load_iris()
 X = iris.data
@@ -51,6 +52,7 @@ class NumPyFFNN:
         out1[out1 < 0] = 0  # ReLU activation function
         out2 = np.dot(out1, self.weights2) + self.bias2
         return out2
+
     def backward(self, x, y, learning_rate):
         # 前向传播
         out1 = np.dot(x, self.weights1) + self.bias1
@@ -89,17 +91,15 @@ batch_indices = np.random.choice(len(X_train), 32, replace=False)
 x_batch = X_train[batch_indices]
 y_batch = y_train[batch_indices]
 
-
-
-#将输入到电路的数据量化为整数
+# 将输入到电路的数据量化为整数
 
 # 假设原始数据集中的特征值范围是 [min_val, max_val]
 min_val = np.min(x_batch)
 max_val = np.max(x_batch)
 
 # 选择整数范围 [-2^31, 2^31-1]
-int_min = -2**7
-int_max = 2**7 - 1
+int_min = -2 ** 31
+int_max = 2 ** 31 - 1
 
 # 映射数据到整数范围
 x_batch_mapped = ((x_batch - min_val) / (max_val - min_val)) * (int_max - int_min) + int_min
@@ -107,16 +107,19 @@ x_batch_mapped = ((x_batch - min_val) / (max_val - min_val)) * (int_max - int_mi
 # 将特征值取整，如果需要
 x_batch_integer = np.round(x_batch_mapped).astype(int)
 
+
 # 前向传播函数
 @fhe.compiler({"x": "encrypted"})
 def enc_forward(x):
-    out1 = np.dot(x, numpy_model.weights1.astype(np.int32)) + numpy_model.bias1.astype(np.int32)
+    out1 = x @ numpy_model.weights1.astype(np.int32) + numpy_model.bias1.astype(np.int32)
     # out1[out1 < 0] = 0  # ReLU activation function
-    # out2 = np.dot(out1, numpy_model.weights2) + numpy_model.bias2
-    return out1.astype(np.int64)
-#编译前向传播电路
-enc_forward_circuit=enc_forward.compile(x_batch_integer)
-print(enc_forward_circuit)
+    out2 = out1 @ numpy_model.weights2.astype(np.int32) + numpy_model.bias2.astype(np.int32)
+    return out2
+
+
+# 编译前向传播电路
+enc_forward_circuit = enc_forward.compile(x_batch_integer)
+# print(enc_forward_circuit.encrypt_run_decrypt(x_batch_integer))
 
 # # 训练模型
 # learning_rate = 0.01

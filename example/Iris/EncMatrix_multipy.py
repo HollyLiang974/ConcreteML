@@ -1,38 +1,33 @@
 '''
 -*- ecoding: utf-8 -*-
 @Enviroment: ConcreteML
-@ModuleName: test1
+@ModuleName: test3
 @Author: Sakura
-@Time: 2023/9/6 12:41
+@Time: 2023/9/7 18:39
 @Software: PyCharm
 功能描述:
 实现步骤:
 结果：
 '''
-import numpy as np
 from concrete import fhe
+import numpy as np
+w= np.random.randint(0, 255, size=(576, 10))
+b= np.random.randint(28, 245, size=(10,))
+configuration = fhe.Configuration(
+    enable_unsafe_features=True,
+    show_mlir=False,
+    show_graph=True,
+)
+@fhe.compiler({"x": "encrypted"})
+def f_lr(x):
+    res = x @ w+b
+    return res
 
-@fhe.compiler({"list1": "encrypted", "list2": "clear"})
-def dot(list1,list2):
-    result=np.dot(list1, list2)
-    return result
-inputset=[(np.random.randint(0, 50, size=(2,)),np.random.randint(0, 50, size=(2,))) for i in range(100)]
-circuit = dot.compile(inputset)
-#矩阵乘法方法
-def matrix_multiply(list1, list2):
-    result = []
-    for row in list1:
-        result_row = []
-        for col in zip(*list2):
-            dot_product = circuit.encrypt(row, list(col))
-            result_row.append(dot_product)
-        result.append(result_row)
-    return result
+inputset = [np.random.randint(0, 15, size=(576,)) for i in range(10000)]
 
-list1=np.random.randint(0, 50, size=(3,2))
-list2=np.random.randint(0, 50, size=(2,3))
-result=matrix_multiply(list1,list2)
-print("result",result)
-print("real_result",np.dot(list1,list2))
+circuit = f_lr.compile(inputset,configuration=configuration)
 
+input=np.random.randint(0, 15, size=(576,))
 
+print("result",circuit.encrypt_run_decrypt(input))
+print("real_result",np.dot(input, w)+b)

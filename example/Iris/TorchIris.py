@@ -33,12 +33,12 @@ class FFNN(nn.Module):
     def __init__(self, input_dim, hidden_dim, output_dim):
         super(FFNN, self).__init__()
         self.fc1 = nn.Linear(input_dim, hidden_dim)
-        self.relu = nn.ReLU()
+        self.sigmoid= nn.Sigmoid()
         self.fc2 = nn.Linear(hidden_dim, output_dim)
 
     def forward(self, x):
         out = self.fc1(x)
-        out = self.relu(out)
+        out = self.sigmoid(out)
         out = self.fc2(out)
         return out
 
@@ -52,10 +52,10 @@ model = FFNN(input_dim, hidden_dim, output_dim)
 
 # 定义损失函数和优化器
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+optimizer = optim.Adam(model.parameters(), lr=0.01)
 
 # 训练模型
-num_epochs = 100
+num_epochs = 1000
 for epoch in range(num_epochs):
     inputs = torch.tensor(X_train, dtype=torch.float32)
     labels = y_train

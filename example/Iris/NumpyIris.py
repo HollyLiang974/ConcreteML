@@ -1,20 +1,9 @@
-'''
--*- ecoding: utf-8 -*-
-@Enviroment: ConcreteML
-@ModuleName: NumpyIris
-@Author: Sakura
-@Time: 2023/9/2 16:19
-@Software: PyCharm
-功能描述: 使用Numpy训练Iris数据集，使用前馈神经网络模型进行训练
-实现步骤:
-结果：
-'''
 import numpy as np
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
-from concrete import fhe
+
 # 加载Iris数据集
 iris = datasets.load_iris()
 X = iris.data
@@ -43,26 +32,30 @@ class NumPyFFNN:
         self.weights2 = np.random.randn(hidden_dim, output_dim)
         self.bias2 = np.zeros(output_dim)
 
+    def sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
+
     def forward(self, x):
         out1 = np.dot(x, self.weights1) + self.bias1
-        out1[out1 < 0] = 0  # ReLU activation function
-        out2 = np.dot(out1, self.weights2) + self.bias2
+        out1_sigmoid = self.sigmoid(out1)  # 使用Sigmoid激活函数
+        out2 = np.dot(out1_sigmoid, self.weights2) + self.bias2
         return out2
+
     def backward(self, x, y, learning_rate):
         # 前向传播
         out1 = np.dot(x, self.weights1) + self.bias1
-        out1[out1 < 0] = 0  # ReLU activation function
-        out2 = np.dot(out1, self.weights2) + self.bias2
+        out1_sigmoid = self.sigmoid(out1)  # 使用Sigmoid激活函数
+        out2 = np.dot(out1_sigmoid, self.weights2) + self.bias2
         loss = np.mean((out2 - y) ** 2)  # 均方误差损失
 
         # 反向传播
         delta_out2 = 2 * (out2 - y) / len(x)
-        delta_weights2 = np.dot(out1.T, delta_out2)
+        delta_weights2 = np.dot(out1_sigmoid.T, delta_out2)
         delta_bias2 = np.sum(delta_out2, axis=0)
         delta_out1 = np.dot(delta_out2, self.weights2.T)
-        delta_out1[out1 <= 0] = 0  # ReLU反向传播
-        delta_weights1 = np.dot(x.T, delta_out1)
-        delta_bias1 = np.sum(delta_out1, axis=0)
+        delta_out1_sigmoid = delta_out1 * out1_sigmoid * (1 - out1_sigmoid)  # Sigmoid的导数
+        delta_weights1 = np.dot(x.T, delta_out1_sigmoid)
+        delta_bias1 = np.sum(delta_out1_sigmoid, axis=0)
 
         # 更新参数
         self.weights2 -= learning_rate * delta_weights2
@@ -99,12 +92,12 @@ for epoch in range(num_epochs):
         print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss}')
 
 # 测试模型
-    # 前向传播
-    predictions = numpy_model.forward(X_test)
+# 前向传播
+predictions = numpy_model.forward(X_test)
 
-    # 计算准确率
-    correct = (np.argmax(predictions, axis=1) == np.argmax(y_test, axis=1)).sum()
-    total = len(X_test)
-    accuracy = correct / total * 100
+# 计算准确率
+correct = (np.argmax(predictions, axis=1) == np.argmax(y_test, axis=1)).sum()
+total = len(X_test)
+accuracy = correct / total * 100
 
 print(f'Test Accuracy: {accuracy:.2f}%')

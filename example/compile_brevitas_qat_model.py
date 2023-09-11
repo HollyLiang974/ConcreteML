@@ -15,9 +15,9 @@ bitwidth 10
 import brevitas.nn as qnn
 import torch.nn as nn
 import torch
-
+from concrete import fhe
 N_FEAT = 12
-n_bits = 4
+n_bits = 3
 
 class QATSimpleNet(nn.Module):
     def __init__(self, n_hidden):
@@ -43,9 +43,17 @@ torch_input = torch.randn(100, N_FEAT)
 torch_model = QATSimpleNet(30)
 import time
 start = time.time()
+conf_simulation = fhe.Configuration(
+    enable_unsafe_features=True,
+    show_mlir=False,
+    show_graph=True,
+    show_progress=True,
+    # auto_adjust_rounders=True,
+)
 quantized_module = compile_brevitas_qat_model(
     torch_model, # our model
     torch_input, # a representative input-set to be used for both quantization and compilation
+    configuration=conf_simulation,
 )
 end = time.time()
 print("编译时间",end-start)

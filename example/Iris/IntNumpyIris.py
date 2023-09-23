@@ -17,8 +17,11 @@ from concrete import fhe
 from concrete.ml.quantization import QuantizedArray
 from concrete.ml.quantization.quantized_ops import (
     QuantizedGemm,
-    QuantizedMatMul,
     QuantizedSigmoid,
+    QuantizedSub,
+    QuantizedMul,
+    QuantizedDiv,
+    QuantizedReduceSum,
 )
 import numpy as np
 from sklearn import datasets
@@ -57,6 +60,47 @@ class NumPyFFNN:
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
 
+    def q_sub(self, n_bits:int,input_0 :numpy.ndarray, input_1:numpy.ndarray):
+        # Quantize the inputs with n_bits
+        q_inputs_0 = QuantizedArray(n_bits, input_0, is_signed=True)
+        q_inputs_1 = QuantizedArray(n_bits, input_1, is_signed=True)
+
+        q_op = QuantizedSub(n_bits, QuantizedSub.__name__, int_input_names={"0", "1"})
+        raw_output_vv = q_op.calibrate(input_0, input_1)
+        # print("raw_output_vv:\n", raw_output_vv)
+        quantized_output_vv = q_op(q_inputs_0, q_inputs_1).dequant()
+        # print("quantized_output_vv:\n", quantized_output_vv)
+
+        return  quantized_output_vv
+
+    def q_mul(self, n_bits:int,input_0 :numpy.ndarray, input_1:numpy.ndarray):
+        # Quantize the inputs with n_bits
+        q_inputs_0 = QuantizedArray(n_bits, input_0, is_signed=True)
+        q_inputs_1 = QuantizedArray(n_bits, input_1, is_signed=True)
+
+        q_op = QuantizedMul(
+            n_bits, QuantizedMul.__name__, int_input_names={"0"}, constant_inputs={"b": q_inputs_1}
+        )
+        raw_output_vv = q_op.calibrate(input_0)
+        # print("raw_output_vv:\n", raw_output_vv)
+        quantized_output_vv = q_op(q_inputs_0).dequant()
+        # print("quantized_output_vv:\n", quantized_output_vv)
+        return quantized_output_vv
+
+    def q_div(self, n_bits:int,input_0 :numpy.ndarray, input_1:numpy.ndarray):
+        # Quantize the inputs with n_bits
+        q_inputs_0 = QuantizedArray(n_bits, input_0, is_signed=True)
+        q_inputs_1 = QuantizedArray(n_bits, input_1, is_signed=True)
+
+        q_op = QuantizedDiv(
+            n_bits, QuantizedDiv.__name__, int_input_names={"0"}, constant_inputs={"b": q_inputs_1}
+        )
+        raw_output_vv = q_op.calibrate(input_0)
+        # print("raw_output_vv:\n", raw_output_vv)
+        quantized_output_vv = q_op(q_inputs_0).dequant()
+        # print("quantized_output_vv:\n", quantized_output_vv)
+        return quantized_output_vv
+
     def q_gemm_(
         self,
         n_bits: int,
@@ -83,6 +127,31 @@ class NumPyFFNN:
 
         return actual_gemm_output
 
+    def q_gemm_no_b(
+        self,
+        n_bits: int,
+        inputs: numpy.ndarray,
+        weights: numpy.ndarray,
+    ):
+        OP_DEBUG_NAME = "Test_"
+        q_inputs = QuantizedArray(n_bits, inputs)
+        q_weights = QuantizedArray(n_bits, weights, is_signed=True)
+        q_gemm = QuantizedGemm(
+            n_bits,
+            OP_DEBUG_NAME + "QuantizedGemm",
+            int_input_names={"0"},
+            constant_inputs={"b": q_weights},
+
+        )
+
+        # Calibrate the Quantized layer
+        q_gemm.produces_graph_output = True
+        q_gemm.calibrate(inputs)
+        actual_gemm_output = q_gemm(q_inputs).dequant()
+        # print("actual_gemm_output:\n", actual_gemm_output)
+
+        return actual_gemm_output
+
     def q_sigmoid(self,n_bits: int, inputs:numpy.ndarray):
         q_inputs = QuantizedArray(n_bits, inputs,is_signed=True)
         quantized_op = QuantizedSigmoid(n_bits, QuantizedSigmoid)
@@ -92,9 +161,6 @@ class NumPyFFNN:
         values = q_output.values
         # print("values:\n", values)
         return values
-
-
-
 
     def forward(self, x):
         out1 = np.dot(x, self.weights1) + self.bias1
@@ -144,13 +210,17 @@ class NumPyFFNN:
         loss = np.mean((out2 - y) ** 2)  # 均方误差损失
 
         # 反向传播
-        delta_out2 = 2 * (out2 - y) / len(x)  #out2是密文，y是密文，所以delta_out2是密文
-        delta_weights2 = np.dot(out1_sigmoid.T, delta_out2) #out1_sigmoid.T是密文，delta_out2是密文，所以delta_weights2是密文，
-                                                            # 密文和密文矩阵乘法不能超过16位
+        # delta_out2 = 2 * (out2 - y) / len(x)  #out2是密文，y是密文，所以delta_out2是密文
+        delta_out2=self.q_div(n_bits,self.q_mul(n_bits,self.q_sub(n_bits,out2,y),2),len(x))
+        # delta_weights2 = np.dot(out1_sigmoid.T, delta_out2) #out1_sigmoid.T是密文，delta_out2是密文，所以delta_weights2是密文，
+        delta_weights2=self.q_gemm_no_b(n_bits,out1_sigmoid.T,delta_out2)                                             # 密文和密文矩阵乘法不能超过16位
         delta_bias2 = np.sum(delta_out2, axis=0) #delta_out2是密文，所以delta_bias2是密文
-        delta_out1 = np.dot(delta_out2, self.weights2.T)
-        delta_out1_sigmoid = delta_out1 * out1_sigmoid * (1 - out1_sigmoid)  # Sigmoid的导数
-        delta_weights1 = np.dot(x.T, delta_out1_sigmoid)
+        # delta_out1 = np.dot(delta_out2, self.weights2.T)
+        delta_out1=self.q_gemm_no_b(n_bits,delta_out2,self.weights2.T)
+        # delta_out1_sigmoid = delta_out1 * out1_sigmoid * (1 - out1_sigmoid)  # Sigmoid的导数
+        delta_out1_sigmoid=self.q_mul(n_bits,self.q_mul(n_bits,delta_out1,out1_sigmoid),self.q_sub(n_bits,1,out1_sigmoid))
+        # delta_weights1 = np.dot(x.T, delta_out1_sigmoid)
+        delta_weights1=self.q_gemm_no_b(n_bits,x.T,delta_out1_sigmoid)
         delta_bias1 = np.sum(delta_out1_sigmoid, axis=0)
 
         # 更新参数
@@ -169,6 +239,7 @@ output_dim = y_train.shape[1]
 
 # 创建NumPy模型实例
 numpy_model = NumPyFFNN(input_dim, hidden_dim, output_dim)
+
 
 # 训练模型
 learning_rate = 0.01

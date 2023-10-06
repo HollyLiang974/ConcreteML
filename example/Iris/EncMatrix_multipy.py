@@ -11,8 +11,8 @@
 '''
 from concrete import fhe
 import numpy as np
-w= np.random.randint(0, 255, size=(576, 10))
-b= np.random.randint(28, 245, size=(10,))
+w= np.random.randint(0, 16, size=(2, 2))
+b= np.random.randint(0, 16, size=(2,2))
 configuration = fhe.Configuration(
     enable_unsafe_features=True,
     show_mlir=False,
@@ -23,11 +23,11 @@ def f_lr(x):
     res = x @ w+b
     return res
 
-inputset = [np.random.randint(0, 15, size=(576,)) for i in range(10000)]
+inputset = [np.random.randint(0, 16, size=(2,2)) for i in range(10000)]
 
 circuit = f_lr.compile(inputset,configuration=configuration)
 
-input=np.random.randint(0, 15, size=(576,))
+input=np.random.randint(0, 15, size=(2,2))
 
 print("result",circuit.encrypt_run_decrypt(input))
 print("real_result",np.dot(input, w)+b)

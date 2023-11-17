@@ -27,6 +27,11 @@ def TestMul(size,inputset, x, y,parameters: Mapping[str, Union[str, EncryptionSt
     circuit = mul.compile(inputset, configuration=config)
     timings["生成电路时间", size] = time.time() - start_time
 
+    #密钥生成时
+    start_time=time.time()
+    circuit.keygen()
+    timings["密钥生成时间", size] = time.time() - start_time
+
     # 加密时间
     start_time = time.time()
     enc = circuit.encrypt(x, y)
